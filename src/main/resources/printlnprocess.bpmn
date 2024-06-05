@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1njkkmb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.13.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <bpmn:collaboration id="Collaboration_0kmlpkd">
+    <bpmn:participant id="Participant_1ejvo3x" name="Привет как дела" processRef="privet_KAK_DELA" />
+  </bpmn:collaboration>
+  <bpmn:process id="privet_KAK_DELA" name="Привет как дела!!" isExecutable="true" camunda:historyTimeToLive="1">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1wj9a42</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Activity_0robvvp" name="Сформировать заказ из магазина">
+      <bpmn:incoming>Flow_1wj9a42</bpmn:incoming>
+      <bpmn:outgoing>Flow_130ksdr</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Send" name="Отправить в СДЕК" camunda:asyncBefore="true" camunda:asyncAfter="true" camunda:delegateExpression="${printLnDelegate}">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_130ksdr</bpmn:incoming>
+      <bpmn:outgoing>Flow_09roee8</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_09roee8" sourceRef="Send" targetRef="Gateway_0obrt71" />
+    <bpmn:sequenceFlow id="Flow_1wj9a42" sourceRef="StartEvent_1" targetRef="Activity_0robvvp" />
+    <bpmn:sequenceFlow id="Flow_130ksdr" sourceRef="Activity_0robvvp" targetRef="Send" />
+    <bpmn:boundaryEvent id="Event_080f1ju" name="Сдек туда не доставляет ИЛИ ВООБЩЕ КАКАЯ-ТО МУТЬ, но не техническая" attachedToRef="Send">
+      <bpmn:outgoing>Flow_0f7fc72</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1qsqlru" errorRef="Error_16cpim5" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0f7fc72" sourceRef="Event_080f1ju" targetRef="Activity_0fqp187" />
+    <bpmn:userTask id="Activity_0fqp187" name="РАЗОБРАТСЯ">
+      <bpmn:incoming>Flow_0f7fc72</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pmrv2a</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_0obrt71">
+      <bpmn:incoming>Flow_09roee8</bpmn:incoming>
+      <bpmn:incoming>Flow_1pmrv2a</bpmn:incoming>
+      <bpmn:outgoing>Flow_066274x</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_066274x" sourceRef="Gateway_0obrt71" targetRef="Event_0n1fuag" />
+    <bpmn:sequenceFlow id="Flow_1pmrv2a" sourceRef="Activity_0fqp187" targetRef="Gateway_0obrt71" />
+    <bpmn:endEvent id="Event_0n1fuag">
+      <bpmn:incoming>Flow_066274x</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+  <bpmn:error id="Error_16cpim5" name="Error_2q1eilg" errorCode="NO_CDEK_DELIVERY" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0kmlpkd">
+      <bpmndi:BPMNShape id="Participant_1ejvo3x_di" bpmnElement="Participant_1ejvo3x" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1580" height="510" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="292" y="292" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_178r03b_di" bpmnElement="Activity_0robvvp">
+        <dc:Bounds x="490" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1eu0i73_di" bpmnElement="Send">
+        <dc:Bounds x="740" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07lmbc1_di" bpmnElement="Activity_0fqp187">
+        <dc:Bounds x="850" y="430" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0obrt71_di" bpmnElement="Gateway_0obrt71" isMarkerVisible="true">
+        <dc:Bounds x="1015" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0n1fuag_di" bpmnElement="Event_0n1fuag">
+        <dc:Bounds x="1212" y="292" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1dlp8lx_di" bpmnElement="Event_080f1ju">
+        <dc:Bounds x="752" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="668" y="380" width="84" height="80" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_09roee8_di" bpmnElement="Flow_09roee8">
+        <di:waypoint x="840" y="310" />
+        <di:waypoint x="1015" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wj9a42_di" bpmnElement="Flow_1wj9a42">
+        <di:waypoint x="328" y="310" />
+        <di:waypoint x="490" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_130ksdr_di" bpmnElement="Flow_130ksdr">
+        <di:waypoint x="590" y="310" />
+        <di:waypoint x="740" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f7fc72_di" bpmnElement="Flow_0f7fc72">
+        <di:waypoint x="770" y="368" />
+        <di:waypoint x="770" y="470" />
+        <di:waypoint x="850" y="470" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_066274x_di" bpmnElement="Flow_066274x">
+        <di:waypoint x="1065" y="310" />
+        <di:waypoint x="1212" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pmrv2a_di" bpmnElement="Flow_1pmrv2a">
+        <di:waypoint x="950" y="470" />
+        <di:waypoint x="1040" y="470" />
+        <di:waypoint x="1040" y="335" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
